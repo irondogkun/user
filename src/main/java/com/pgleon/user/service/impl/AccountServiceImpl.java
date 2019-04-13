@@ -1,10 +1,15 @@
 package com.pgleon.user.service.impl;
 
+import com.pgleon.user.domain.mapper.UserMapper;
 import com.pgleon.user.domain.pojo.Account;
 import com.pgleon.user.service.IAccountService;
+import com.pgleon.user.service.UserApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -15,6 +20,8 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements IAccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
+    @Autowired
+    UserMapper userMapper;
     /**
      * 新增账户
      *
@@ -23,8 +30,35 @@ public class AccountServiceImpl implements IAccountService {
      */
     @Override
     public Account createAccount(Account account) throws Exception {
-        return null;
+        if (!isAccountExist(account)) {
+            //账户不存在
+            try {
+                Integer i = userMapper.insertAccount(account);
+                return account;
+            } catch (Exception ex) {
+                logger.error("创建账户过程中出现异常", ex, account);
+                throw new UserApiException.InternalServerException("创建账户过程中出现异常");
+            }
+        } else {
+            logger.error("账户已存在", account);
+            throw new UserApiException.accountAlreadyExistException("账户已存在");
+        }
     }
+
+    /**
+     * 判断账户是否已经存在
+     */
+    public boolean isAccountExist(Account account) throws Exception {
+        if (account == null || account.getUserName() == null) {
+            throw new UserApiException.noEnoughArgsException("缺少必要字段");
+        }
+        List<Account> accounts = userMapper.findAccounts(account);
+        if (accounts != null && accounts.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * 删除账户

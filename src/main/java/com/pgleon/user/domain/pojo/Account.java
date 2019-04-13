@@ -12,7 +12,6 @@ public class Account {
     private String phone;
     private Integer userType;
     private Integer createrId;
-    private Integer branchId;
     private String branchName;
     private String roleNames;
     private long createTime;
@@ -80,14 +79,6 @@ public class Account {
 
     public void setCreaterId(Integer createrId) {
         this.createrId = createrId;
-    }
-
-    public Integer getBranchId() {
-        return branchId;
-    }
-
-    public void setBranchId(Integer branchId) {
-        this.branchId = branchId;
     }
 
     public String getBranchName() {

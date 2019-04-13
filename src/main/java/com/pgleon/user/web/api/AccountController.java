@@ -2,14 +2,11 @@ package com.pgleon.user.web.api;
 
 
 import com.google.common.collect.ImmutableMap;
-import com.pgleon.mallspringboot.PagingParam;
-import com.pgleon.rpcapi.user.UserService;
 import com.pgleon.user.domain.pojo.Account;
 import com.pgleon.user.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 /**
  * Created by leon on 2019-04-11 11:54
@@ -19,9 +16,6 @@ import java.util.List;
 public class AccountController {
     @Autowired
     private IAccountService accountService;
-
-    @Autowired
-    private UserService userService;
 
 
     /**

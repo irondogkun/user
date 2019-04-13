@@ -2,8 +2,6 @@ package com.pgleon.user.web.api;
 
 import com.google.common.collect.ImmutableMap;
 import com.pgleon.mallspringboot.sign.NoNeedSign;
-import com.pgleon.user.service.IPushTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +25,8 @@ public class AppController {
                 .put("dateTime", System.currentTimeMillis())
                 .build();
     }
+
+
 
 
 }

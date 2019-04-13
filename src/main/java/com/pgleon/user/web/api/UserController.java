@@ -1,9 +1,10 @@
 package com.pgleon.user.web.api;
 
 
-import com.pgleon.user.domain.pojo.LoginResult;
+import com.google.common.base.Strings;
 import com.pgleon.user.service.IUserService;
-import com.pgleon.user.service.LoginArgs;
+import com.pgleon.user.domain.pojo.LoginArgs;
+import com.pgleon.user.service.UserApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @Description:用户管理模块接口
- * Created by Zev.Sun on 2016/11/28.
- */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -23,29 +20,21 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    /**
-     * 用户登录
-     * @param loginArgs
-     * @return
-     * @throws Exception
-     */
-    @PostMapping("login")
+   /**
+    * @Author Leon
+    * @Description 管理台登录
+    * @Param [loginArgs, request]
+    * @return java.lang.Object
+    **/
+    @PostMapping("/admin/login")
     public Object login(@RequestBody LoginArgs loginArgs, HttpServletRequest request) throws Exception {
-//        if(!Strings.isNullOrEmpty(loginArgs.getUserName()) && loginArgs.getUserName().contains("_admin") )
-//            return adminAccountLogin(loginArgs,request);
-        return commonLogin(loginArgs,request);
+        if (loginArgs == null || Strings.isNullOrEmpty(loginArgs.getUserName())
+                || Strings.isNullOrEmpty(loginArgs.getPassword())) {
+            throw new UserApiException.noEnoughArgsException("缺少必要参数");
+        }
+        return userService.adminLogin(loginArgs,request);
     }
 
-    /**
-     * 普通用户登录
-     * @param loginArgs
-     * @return
-     * @throws Exception
-     */
-    public LoginResult commonLogin(LoginArgs loginArgs, HttpServletRequest request)throws Exception {
-
-        return userService.login(loginArgs,request);
-    }
 
 
 }

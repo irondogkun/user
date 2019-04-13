@@ -2,6 +2,7 @@ package com.pgleon.user.domain.mapper;
 
 import com.pgleon.rpcapi.user.pojo.TokenIdentity;
 import com.pgleon.user.domain.pojo.Account;
+import com.pgleon.user.domain.pojo.LoginArgs;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -61,17 +62,17 @@ public interface UserMapper {
     /**
      * @Description: 根据用户名和公司判断该账户是否已经存在
      */
-    @Select("select id as userId from user where user_name = #{account.userName} and company_id = #{account.companyId}")
+    @Select("select id as userId from user where user_name = #{account.userName}")
     List<Account> findAccounts(@Param("account") Account account);
 
 
     /**
      * @Description: insiAP新增账户
      */
-    @Insert("INSERT INTO user (user_name,phone,company_id,password,role_id,user_type,user_status,branch_id,created,creater_id) " +
+    @Insert("INSERT INTO user (user_name,phone,password,role_id,user_type,user_status,created) " +
             "VALUES " +
-            "(#{account.userName},#{account.phone},#{account.companyId},#{account.password},#{account.roleId}," +
-            "#{account.userType},#{account.status},#{account.branchId},now(),#{account.createrId})")
+            "(#{account.userName},#{account.phone},#{account.password},#{account.roleId}," +
+            "#{account.userType},#{account.status},now())")
     @SelectKey(statement = "SELECT LAST_INSERT_ID() as userId", keyProperty = "account.userId", before = false, resultType = Integer.class)
     Integer insertAccount(@Param("account") Account account);
 
@@ -249,4 +250,7 @@ public interface UserMapper {
             "AND app_id = #{appId} " +
             "ORDER BY created DESC LIMIT 1 ")
     TokenIdentity getLastTokenIdentity(@Param("userId") Integer userId, @Param("appId") String appId);
+
+    @Select("select id as userId,user_name as userName from user where user_name = #{loginArgs.userName} and password = #{loginArgs.password} ")
+    Account adminLogin(@Param("loginArgs")LoginArgs loginArgs);
 }

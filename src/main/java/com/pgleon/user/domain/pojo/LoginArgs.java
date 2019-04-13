@@ -1,4 +1,4 @@
-package com.pgleon.user.service;
+package com.pgleon.user.domain.pojo;
 
 public class LoginArgs {
     private String userName;
